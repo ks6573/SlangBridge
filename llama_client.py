@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 from llama_api_client import LlamaAPIClient
-from llama_api_client.types import UserMessageParam
+# from llama_api_client.types import UserMessageParam
 
 load_dotenv()
 
@@ -20,14 +20,8 @@ def query_llama(term):
         )
         full_meaning = detailed_response.completion_message.content.text.strip()
 
-        # Step 2: Ask for a summary
-        summary_response = client.chat.completions.create(
-            model="Llama-4-Maverick-17B-128E-Instruct-FP8",
-            messages=[
-                {"role": "user", "content": f"Summarize the slang term '{term}' in one short sentence using simple English."}
-            ],
-        )
-        short_summary = summary_response.completion_message.content.text.strip()
+        # Step 2: Use summarize_definition for summary
+        short_summary = summarize_definition(term, full_meaning)
 
         return f"{full_meaning}\n\n✏️ Simple Summary: {short_summary}"
 
@@ -35,7 +29,14 @@ def query_llama(term):
         print("LLAMA API Error:", e)
         return None
 
-def summarize_definition(term, definition):
+def summarize_definition(term, definition, summary=None):
+    """
+    Returns a summary for the slang term.
+    If `summary` is provided (e.g., from a dataset), returns it.
+    Otherwise, queries the LLM for a summary.
+    """
+    if summary:
+        return summary
     try:
         response = client.chat.completions.create(
             model="Llama-4-Maverick-17B-128E-Instruct-FP8",
