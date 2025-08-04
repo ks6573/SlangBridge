@@ -1,0 +1,2 @@
+total_pairs,unique_slang_terms,sources,avg_slang_length,avg_standard_length,length_distribution
+4076,2883,{'urban_dictionary_mega': 4076},9.459764474975467,78.20510304219823,"{'medium': 2809, 'short': 853, 'long': 414}"
